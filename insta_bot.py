@@ -6,17 +6,8 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
-      "-------------------------------INSTAGRAM BOT V.1------------------------------------\n"
+      "-------------------------------INSTAGRAM BOT V.1.1------------------------------------\n"
       "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-
-# Insert comments here
-COMMENTS = ["comment_example1", "comment_example2", "comment_example3"]
-
-# Pulls credentials from credentials.txt
-with open("credentials.txt") as cred_file:
-    CREDENTIALS = cred_file.readlines()
-    USERNAME = CREDENTIALS[1].strip()
-    PASSWORD = CREDENTIALS[2].strip()
 
 
 # Function for getting a random hashtag from hashtags.txt
@@ -26,20 +17,32 @@ def get_random_hashtag():
     return random.choice(hashtag_text).strip()
 
 
+# Insert comments here
+COMMENTS = ["comment_example1", "comment_example2", "comment_example3"]
+
+
+# Pulls credentials from credentials.txt
+with open("credentials.txt") as cred_file:
+    CREDENTIALS = cred_file.readlines()
+    USERNAME = CREDENTIALS[1].strip()
+    PASSWORD = CREDENTIALS[2].strip()
+
 # This number will most likely never be reached
 # This variable is so the program will interact with the daily maximum amount of posts
 POSTS = 5000
 
 # Define the HTML XPATH
 # I know these are a bit long but this was the easiest way if any changes need to be made
-LIKE = "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[1]/span[1]/button"
-FIRST_PIC = "/html/body/div[2]/div/div/div/div[1]/div/div/div/div[1]/div[1]/div[2]/section/main/article/div[1]/div/div/div[1]/div[1]/a/div[1]/div[2]"
-FIRST_NEXT = "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[1]/div/div/div/button"
-SECOND_NEXT = "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[1]/div/div/div[2]/button"
-COMMENT_BUTTON = "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[3]/div/form/div/textarea"
-POST_COMMENT = "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[3]/div/form/div/div[2]/div"
-LIMITED_COMMENTS = "/html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/div[3]/div"
-LIMIT = "/html/body/div[2]/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[2]/button[2]"
+LIKE2 = "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[1]/span[1]/button"
+LIKE = "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[3]/div/div/section[1]/span[1]/button"
+FIRST_PIC = "/html/body/div[2]/div/div/div[1]/div/div/div/div[1]/div[1]/div[2]/section/main/article/div[1]/div/div/div[1]/div[1]/a/div[1]/div[2]"
+FIRST_NEXT = "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[1]/div/div/div/button"
+SECOND_NEXT = "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[1]/div/div/div[2]/button"
+COMMENT_BUTTON = "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[3]/div/form/div/textarea"
+POST_COMMENT = "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[3]/div/form/div/div[2]/div"
+LIMITED_COMMENTS = "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/div[3]/div"
+LIMIT = "/html/body/div[2]/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[2]/button[2]"
+
 
 # Random wait time, can be adjusted
 WAIT = random.randint(2, 5)
@@ -77,9 +80,12 @@ while True:
 
 #   Selects first picture and begins the process of liking and commenting
     try:
-        browser.find_element(by=By.XPATH, value=FIRST_PIC).click()   # 1st pic
+        browser.find_element(by=By.XPATH, value=FIRST_PIC).click()
         time.sleep(3)
-        browser.find_element(by=By.XPATH, value=LIKE).click()  # 1st like
+        try:
+            browser.find_element(by=By.XPATH, value=LIKE2).click()
+        except NoSuchElementException:
+            browser.find_element(by=By.XPATH, value=LIKE).click()
         time.sleep(1)
         # Check for limited comments
         try:
@@ -107,7 +113,10 @@ while True:
                     print("***DAILY COMMENT LIMIT REACHED***")
                     # If daily comment limit was reached goes into like only mode
                     for i in range(2, POSTS + 1):
-                        browser.find_element(by=By.XPATH, value=LIKE).click()
+                        try:
+                            browser.find_element(by=By.XPATH, value=LIKE2).click()
+                        except NoSuchElementException:
+                            browser.find_element(by=By.XPATH, value=LIKE).click()
                         time.sleep(WAIT)
                         browser.find_element(by=By.XPATH, value=SECOND_NEXT).click()
                         time.sleep(WAIT)
@@ -125,7 +134,10 @@ while True:
 
         # This loop begins on second post and continues until either limit or exception
         for i in range(2, POSTS+1):
-            browser.find_element(by=By.XPATH, value=LIKE).click()
+            try:
+                browser.find_element(by=By.XPATH, value=LIKE2).click()  # 1st like
+            except NoSuchElementException:
+                browser.find_element(by=By.XPATH, value=LIKE).click()
             time.sleep(WAIT)
             # Check for limited comments
             try:
@@ -173,8 +185,8 @@ while True:
         # Prints the exception so you know what happened
         print(e)
         browser.close()
-        # Chooses random sleep time between 12 and 17 hours, can be changed
-        SLEEP = random.randint(720, 1020)
+        # Chooses random sleep time between 24 and 26 hours, can be changed
+        SLEEP = random.randint(1140, 1560)
         # Sleeps until timer is up, then runs again
         print("***SLEEPING***")
         for minute in range(1, SLEEP):
