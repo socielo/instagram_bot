@@ -31,7 +31,7 @@ with open("credentials.txt") as cred_file:
 # This variable is so the program will interact with the daily maximum amount of posts
 POSTS = 5000
 
-# Define the HTML XPATH
+# Define the XPATH
 # I know these are a bit long but this was the easiest way if any changes need to be made
 LIKE2 = "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[1]/span[1]/button"
 LIKE = "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[3]/div/div/section[1]/span[1]/button"
